@@ -15,3 +15,16 @@ def init_db() -> None:
     """)
     con.commit()
     con.close()
+
+
+def add_password(service: str, login: str, password: str, notes: str = '') -> None:
+    con = sqlite3.connect(DB_PATH)
+    con.execute(
+        """
+        INSERT INTO passwords (service, login, password, notes)
+        VALUES (?, ?, ?, ?)
+        """, 
+        (service, login, password, notes),
+    )
+    con.commit()
+    con.close()

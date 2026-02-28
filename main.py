@@ -25,6 +25,22 @@ def generate_password(length: int = 12) -> str:
 def show_menu() -> None:
     print("\tLocal Password Manager")
     print("Type 'help' to get available cmds")
+    while True:
+        cmd = input('> ').lower()
+        if not cmd:
+            continue
+        if cmd == 'quit':
+            quit()
+        elif cmd == 'help':
+            show_help()
+        elif cmd == 'list':
+            show_list()
+        elif cmd == 'add':
+            show_add()
+        elif cmd == 'update':
+            show_update()
+        else:
+            print("Unknown command. Type 'help' to get available commands")
 
 
 def show_help() -> None:
@@ -40,7 +56,16 @@ def show_list() -> None:
 
 
 def show_add() -> None:
-    print("not implemented yet")
+    print("=== Add password ===")
+    print("If you want to add a new password, type 'yes'")
+    print("Or type 'no' to go back to main menu")
+    while True:
+        ans = input("> ").lower()
+        if ans == 'yes':
+            # create password
+            pass
+        if ans == 'no':
+            show_menu()
 
 
 def show_update() -> None:
@@ -51,22 +76,7 @@ def main() -> None:
     # add auth
     db.init_db()
     show_menu()
-    while True:
-        cmd = input('> ').lower()
-        if not cmd:
-            continue
-        if cmd == 'quit':
-            break
-        elif cmd == 'help':
-            show_help()
-        elif cmd == 'list':
-            show_list()
-        elif cmd == 'add':
-            show_add()
-        elif cmd == 'update':
-            show_update()
-        else:
-            print("Unknown command. Type 'help' to get available commands")
+
 
 if __name__ == '__main__':
     main()
