@@ -1,0 +1,11 @@
+print("Password Manager")
+print("Options:")
+print("help - show help")
+print("list - view all passwords")
+print("add - add new password")
+print("update - update password")
+print("delete - delete password")
+print("quit - quit")
+print("")
+
+input("> ")
