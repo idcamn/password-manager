@@ -28,3 +28,13 @@ def add_password(service: str, login: str, password: str, notes: str = '') -> No
     )
     con.commit()
     con.close()
+
+
+def load_passwords() -> list[tuple]:
+    with sqlite3.connect(DB_PATH) as con:
+        cur = con.execute("""
+            SELECT id, service, login, password, notes
+            FROM passwords
+            ORDER BY id
+        """)
+        return cur.fetchall()

@@ -52,7 +52,9 @@ def show_help() -> None:
 
 
 def show_list() -> None:
-    print("not implemented yet")
+    pw_data = db.load_passwords()
+    print(pw_data)
+    show_menu()
 
 
 def show_add() -> None:
