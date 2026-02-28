@@ -29,7 +29,7 @@ def show_menu() -> None:
         cmd = input('> ').lower()
         if not cmd:
             continue
-        if cmd == 'quit':
+        if cmd in ['quit', 'q']:
             quit()
         elif cmd == 'help':
             show_help()
@@ -56,15 +56,26 @@ def show_list() -> None:
 
 
 def show_add() -> None:
-    print("=== Add password ===")
-    print("If you want to add a new password, type 'yes'")
-    print("Or type 'no' to go back to main menu")
+    print("[add new password]")
+    print("type 'yes' to continue")
     while True:
         ans = input("> ").lower()
-        if ans == 'yes':
-            # create password
-            pass
-        if ans == 'no':
+        if not ans:
+            continue
+        if ans in ['yes', 'y']:
+            data_service = input('service: ')
+            data_login = input('login: ')
+            pw_ans = input('generate password (1) or insert manually (2): ')
+            if pw_ans == '1':
+                data_password = generate_password(12)
+                print(f"generated password: {data_password}")
+            else:
+                data_password = input('password: ')
+            data_notes = input('notes (optional): ')
+            db.add_password(data_service, data_login, data_password, data_notes)
+            print('success!')
+            show_menu()
+        else:
             show_menu()
 
 
