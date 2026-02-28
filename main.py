@@ -3,8 +3,6 @@ import secrets
 import string
 
 def generate_password(length: int = 12) -> str:
-    if not isinstance(length, int):
-        raise TypeError("Password length must be an integer")
     if length < 4:
         raise ValueError("Password length must be >= 4")
 
