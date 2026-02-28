@@ -23,12 +23,12 @@ def generate_password(length: int = 12) -> str:
     return ''.join(res)
 
 
-def show_menu():
+def show_menu() -> None:
     print("\tLocal Password Manager")
     print("Type 'help' to get available cmds")
 
 
-def show_help():
+def show_help() -> None:
     print("help - view available commands")
     print("list - view all passwords")
     print("add - add new password")
@@ -36,19 +36,19 @@ def show_help():
     print("quit - quit")
 
 
-def show_list():
+def show_list() -> None:
     print("not implemented yet")
 
 
-def show_add():
+def show_add() -> None:
     print("not implemented yet")
 
 
-def show_update():
+def show_update() -> None:
     print("not implemented yet")
 
 
-def main():
+def main() -> None:
     # add auth
     db.init_db()
     show_menu()
