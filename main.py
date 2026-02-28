@@ -2,6 +2,22 @@ import sqlite3
 import secrets
 import string
 
+DB_PATH = 'passwords.db'
+con = sqlite3.connect(DB_PATH) 
+cur = con.cursor()
+
+def init_db():
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS passwords (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            password TEXT,
+            notes TEXT
+        )
+    ''')
+    con.commit()
+    con.close()
+
 def generate_password(length: int = 12) -> str:
     if length < 4:
         raise ValueError("Password length must be >= 4")
@@ -47,6 +63,7 @@ def show_update():
 
 
 def main():
+    init_db()
     # add auth
     show_menu()
     while True:
