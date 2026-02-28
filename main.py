@@ -1,5 +1,11 @@
 import sqlite3
 import secrets
+import string
+
+def generate_password(length: int = 8) -> str:
+    pool = string.ascii_letters + string.digits + '()[]!@#$^&_?+-*/={}:;'
+    return ''.join(secrets.choice(pool) for _ in range(length))
+
 
 def show_menu():
     print("\tLocal Password Manager")
