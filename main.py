@@ -1,4 +1,3 @@
-import sqlite3
 import secrets
 import string
 import database as db

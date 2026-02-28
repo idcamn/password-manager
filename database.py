@@ -7,7 +7,8 @@ def init_db() -> None:
     con.execute("""
         CREATE TABLE IF NOT EXISTS passwords (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT,
+            service TEXT,
+            login TEXT,
             password TEXT,
             notes TEXT
         )
