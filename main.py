@@ -3,6 +3,11 @@ import secrets
 import string
 
 def generate_password(length: int = 8) -> str:
+    uppercase = secrets.choice(string.ascii_uppercase)
+    lowercase = secrets.choice(string.ascii_lowercase)
+    digit = secrets.choice(string.digits)
+
+
     pool = string.ascii_letters + string.digits + '()[]!@#$^&_?+-*/={}:;'
     return ''.join(secrets.choice(pool) for _ in range(length))
 
