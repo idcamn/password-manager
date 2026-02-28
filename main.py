@@ -54,35 +54,37 @@ def show_help() -> None:
 def show_list() -> None:
     pw_data = db.load_passwords()
     print(pw_data)
-    show_menu()
 
 
 def show_add() -> None:
     print("[add new password]")
     print("type 'yes' to continue")
-    while True:
-        ans = input("> ").lower()
-        if not ans:
-            continue
-        if ans in ['yes', 'y']:
-            data_service = input('service: ')
-            data_login = input('login: ')
-            pw_ans = input('generate password (1) or insert manually (2): ')
-            if pw_ans == '1':
-                data_password = generate_password(12)
-                print(f"generated password: {data_password}")
-            else:
-                data_password = input('password: ')
-            data_notes = input('notes (optional): ')
-            db.add_password(data_service, data_login, data_password, data_notes)
-            print('success!')
-            show_menu()
+    ans = input("> ").lower()
+    if ans in ['yes', 'y']:
+        data_service = input('service: ')
+        data_login = input('login: ')
+        pw_ans = input('generate password (1) or insert manually (2): ')
+        if pw_ans == '1':
+            data_password = generate_password(12)
+            print(f"generated password: {data_password}")
         else:
-            show_menu()
+            data_password = input('password: ')
+        data_notes = input('notes (optional): ')
+        db.add_password(data_service, data_login, data_password, data_notes)
+        print('success!')
 
 
 def show_update() -> None:
-    print("not implemented yet")
+    data = None
+    while True:
+        ans = int(input('type row id to edit: '))
+        res = db.load_by_id(ans)
+        if res is None:
+            print('incorrect id specified, try again!')
+            continue
+        else:
+            break
+        
 
 
 def main() -> None:

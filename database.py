@@ -38,3 +38,9 @@ def load_passwords() -> list[tuple]:
             ORDER BY id
         """)
         return cur.fetchall()
+    
+
+def load_by_id(id: int) -> tuple | None:
+    with sqlite3.connect(DB_PATH) as con:
+        cur = con.execute("SELECT id, service, login, password, notes FROM passwords WHERE id = ?", (id,),)
+        return cur.fetchone()
