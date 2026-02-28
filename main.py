@@ -2,14 +2,26 @@ import sqlite3
 import secrets
 import string
 
-def generate_password(length: int = 8) -> str:
-    uppercase = secrets.choice(string.ascii_uppercase)
-    lowercase = secrets.choice(string.ascii_lowercase)
-    digit = secrets.choice(string.digits)
+def generate_password(length: int = 10) -> str:
+    if type(length) is not int:
+        raise TypeError("Password length must be an integer")
+    if length < 4:
+        raise ValueError("Password length must be >= 4")
 
+    symbols = '()[]!@#$^&_?+-*/={}:;'
 
-    pool = string.ascii_letters + string.digits + '()[]!@#$^&_?+-*/={}:;'
-    return ''.join(secrets.choice(pool) for _ in range(length))
+    # Guarantee every symbol at least once
+    req = [
+        secrets.choice(string.ascii_uppercase),
+        secrets.choice(string.ascii_lowercase),
+        secrets.choice(string.digits),
+        secrets.choice(symbols)
+    ]
+
+    pool = string.ascii_letters + string.digits + symbols
+    res = [secrets.choice(pool) for _ in range(length - 4)] + req
+    secrets.SystemRandom().shuffle(res)
+    return ''.join(res)
 
 
 def show_menu():
