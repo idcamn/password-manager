@@ -1,22 +1,7 @@
 import sqlite3
 import secrets
 import string
-
-DB_PATH = 'passwords.db'
-con = sqlite3.connect(DB_PATH) 
-cur = con.cursor()
-
-def init_db():
-    cur.execute('''
-        CREATE TABLE IF NOT EXISTS passwords (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT,
-            password TEXT,
-            notes TEXT
-        )
-    ''')
-    con.commit()
-    con.close()
+import database as db
 
 def generate_password(length: int = 12) -> str:
     if length < 4:
@@ -44,6 +29,7 @@ def show_menu():
 
 
 def show_help():
+    print("help - view available commands")
     print("list - view all passwords")
     print("add - add new password")
     print("update - update password")
@@ -63,8 +49,8 @@ def show_update():
 
 
 def main():
-    init_db()
     # add auth
+    db.init_db()
     show_menu()
     while True:
         cmd = input('> ').lower()
