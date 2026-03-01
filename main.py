@@ -51,11 +51,33 @@ def show_cmds() -> None:
 
 
 def show_list() -> None:
-    # TODO: change output, make it look nice
     print("[Passwords List]")
-    pw_data = db.list_entries()
-    print(pw_data)
+    print_entries(db.list_entries())
     # TODO: if asked, copy password by id
+
+
+def print_entries(entries: list[tuple]) -> None:
+    """Print entries as a formatted table"""
+    if entries:
+        header = (
+            f"{'[id]':4}"
+            f"{'[service]':>12}\t"
+            f"{'[login]':>12}\t"
+            f"{'[password]':>16}\t"
+            f"{'[notes]':>14}"
+        )
+        print(header)
+
+        for entry_id, service, login, password, notes in entries:
+            print(
+                f"{entry_id:4}"
+                f"{service:>12}\t"
+                f"{login:>12}\t"
+                f"{password:>16}\t"
+                f"{notes:>14}"
+            )
+    else:
+        print('No entries found')
 
 
 def show_add() -> None:
@@ -87,11 +109,8 @@ def show_update() -> None:
         if entry_id == 0:
             return
         row = db.get_entry(entry_id)
-    entry_id, service, login, password, notes = row
 
-    # random widths that I liked while testing
-    print(f"{'[id]':4}{'[service]':>12}\t{'[login]':>12}\t{'[password]':>16}\t{'[notes]':>14}")
-    print(f"{entry_id:4}{service:>12}\t{login:>12}\t{password:>16}\t{notes:>14}")
+    print_entries([row])
     
     print("Available actions: u(pdate), d(elete)")
     ans = input('Enter action: ').lower()
