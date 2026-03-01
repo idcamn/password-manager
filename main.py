@@ -54,7 +54,7 @@ def show_help() -> None:
 
 def show_list() -> None:
     # TODO: change output, make it look nice
-    pw_data = db.load_passwords()
+    pw_data = db.list_entries()
     print(pw_data)
     # TODO: if asked, copy password by id
 
@@ -73,23 +73,24 @@ def show_add() -> None:
         else:
             data_password = input('password: ')
         data_notes = input('notes (optional): ')
-        db.add_password(data_service, data_login, data_password, data_notes)
+        db.create_entry(data_service, data_login, data_password, data_notes)
         print('success!')
 
 
 def show_update() -> None:
-    row_id = int(input('enter row id: '))
-    row = db.load_by_id(row_id)
+    # FIXME: raising valueerror if input != int, add checks for empty/non-digit input
+    entry_id = int(input('enter row id: '))
+    row = db.get_entry(entry_id)
     while row is None:
-        row_id = int(input('incorrect id! enter correct id (or 0 to exit): '))
-        if row_id == 0:
+        entry_id = int(input('incorrect id! enter correct id (or 0 to exit): '))
+        if entry_id == 0:
             return
-        row = db.load_by_id(row_id)
-    idx, service, login, password, notes = row
+        row = db.get_entry(entry_id)
+    entry_id, service, login, password, notes = row
 
     # random widths that I liked while testing
     print(f"{'[id]':4}{'[service]':>12}\t{'[login]':>12}\t{'[password]':>16}\t{'[notes]':>14}")
-    print(f"{idx:4}{service:>12}\t{login:>12}\t{password:>16}\t{notes:>14}")
+    print(f"{entry_id:4}{service:>12}\t{login:>12}\t{password:>16}\t{notes:>14}")
     
     # TODO: edit output, currently its very ugly :\
     print('u - update; d - delete; e - exit')
@@ -102,12 +103,12 @@ def show_update() -> None:
         while column not in ['service', 'login', 'password', 'notes']:
             column = input('incorrect value! enter column name to edit: ').lower()
         value = input('enter new value: ')
-        res = db.edit_by_id(row_id, column, value)
+        res = db.update_entry(entry_id, column, value)
         print('success!' if res else 'something went wrong..')
     elif ans == 'd':
         confirm = input("are you sure? type 'yes' to continue: ").lower()
         if confirm in ['yes', 'y']:
-            res = db.delete_by_id(row_id)
+            res = db.delete_entry(entry_id)
             print('row deleted!' if res else 'something went wrong..')
 
 

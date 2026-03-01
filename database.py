@@ -17,7 +17,7 @@ def init_db() -> None:
         """)
 
 
-def add_password(service: str, login: str, password: str, notes: str = '') -> None:
+def create_entry(service: str, login: str, password: str, notes: str = '') -> None:
     """Insert a new password record into the database"""
     with sqlite3.connect(DB_PATH) as con:
         con.execute("""
@@ -28,7 +28,7 @@ def add_password(service: str, login: str, password: str, notes: str = '') -> No
         )
 
 
-def load_passwords() -> list[tuple]:
+def list_entries() -> list[tuple]:
     """Load all password records ordered by id"""
     with sqlite3.connect(DB_PATH) as con:
         cur = con.execute("""
@@ -39,27 +39,27 @@ def load_passwords() -> list[tuple]:
         return cur.fetchall()
     
 
-def load_by_id(row_id: int) -> tuple | None:
+def get_entry(entry_id: int) -> tuple | None:
     """Load a single password record by its id"""
     with sqlite3.connect(DB_PATH) as con:
         cur = con.execute(
             "SELECT id, service, login, password, notes FROM passwords WHERE id = ?", 
-            (row_id,),
+            (entry_id,),
         )
         return cur.fetchone()
 
 
-def delete_by_id(row_id: int) -> bool:
+def delete_entry(entry_id: int) -> bool:
     """Delete a password record by its id"""
     with sqlite3.connect(DB_PATH) as con:
         cur = con.execute(
             "DELETE FROM passwords WHERE id = ?", 
-            (row_id,),
+            (entry_id,),
         )
         return cur.rowcount > 0
     
 
-def edit_by_id(row_id: int, column_name: str, new_value: str) -> bool:
+def update_entry(entry_id: int, column_name: str, new_value: str) -> bool:
     """Update a selected column value by id"""
     allowed_columns = {"service", "login", "password", "notes"}
     if column_name not in allowed_columns:
@@ -68,6 +68,6 @@ def edit_by_id(row_id: int, column_name: str, new_value: str) -> bool:
     with sqlite3.connect(DB_PATH) as con:
         cur = con.execute(
             f"UPDATE passwords SET {column_name} = ? WHERE id = ?", 
-            (new_value, row_id),
+            (new_value, entry_id),
         )
         return cur.rowcount > 0
