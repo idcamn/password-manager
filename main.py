@@ -85,6 +85,8 @@ def show_update() -> None:
             return
         row = db.load_by_id(row_id)
     idx, service, login, password, notes = row
+
+    # random widths that I liked while testing
     print(f"{'[id]':4}{'[service]':>12}\t{'[login]':>12}\t{'[password]':>16}\t{'[notes]':>14}")
     print(f"{idx:4}{service:>12}\t{login:>12}\t{password:>16}\t{notes:>14}")
     
