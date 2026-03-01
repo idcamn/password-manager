@@ -24,16 +24,16 @@ def generate_password(length: int = 12) -> str:
 
 
 def show_menu() -> None:
-    print("\tLocal Password Manager")
-    print("Type 'help' to get available cmds")
+    print("[Main Menu]")
+    print("Type 'cmds' to get available commands")
     while True:
         cmd = input('> ').lower()
         if not cmd:
             continue
         if cmd in ['quit', 'q']:
             quit()
-        elif cmd == 'help':
-            show_help()
+        elif cmd == 'cmds':
+            show_cmds()
         elif cmd == 'list':
             show_list()
         elif cmd == 'add':
@@ -41,48 +41,52 @@ def show_menu() -> None:
         elif cmd == 'update':
             show_update()
         else:
-            print("Unknown command. Type 'help' to get available commands")
+            print("Unknown command. Type 'cmds' to get available commands")
 
 
-def show_help() -> None:
-    print("help - view available commands")
+def show_cmds() -> None:
+    print("[Commands]")
+    print("cmds - view available commands")
     print("list - view all passwords")
     print("add - add new password")
     print("update - update password")
-    print("quit - quit")
+    print("quit - exit program")
 
 
 def show_list() -> None:
     # TODO: change output, make it look nice
+    print("[Passwords List]")
     pw_data = db.list_entries()
     print(pw_data)
     # TODO: if asked, copy password by id
 
 
 def show_add() -> None:
-    print("[add new password]")
-    print("type 'yes' to continue")
+    print("[Add New Password]")
+    print("Type 'yes' to continue")
     ans = input("> ").lower()
     if ans in ['yes', 'y']:
-        data_service = input('service: ')
-        data_login = input('login: ')
-        pw_ans = input('generate password (1) or insert manually (2): ')
-        if pw_ans == '1':
+        data_service = input('Enter service name: ')
+        data_login = input('Enter login: ')
+        pw_ans = input('Enter password manually (1) or generate it (2): ')
+        if pw_ans == '2':
             data_password = generate_password(12)
-            print(f"generated password: {data_password}")
+            print(f"Generated password: {data_password}")
+            # TODO: Copy password to clipboard
         else:
-            data_password = input('password: ')
-        data_notes = input('notes (optional): ')
+            data_password = input('Password: ')
+        data_notes = input('Enter notes (optional): ')
         db.create_entry(data_service, data_login, data_password, data_notes)
-        print('success!')
+        print('Success!')
 
 
 def show_update() -> None:
     # FIXME: raising valueerror if input != int, add checks for empty/non-digit input
-    entry_id = int(input('enter row id: '))
+    print("[Update Password]")
+    entry_id = int(input('Enter ID (from passwords list): '))
     row = db.get_entry(entry_id)
     while row is None:
-        entry_id = int(input('incorrect id! enter correct id (or 0 to exit): '))
+        entry_id = int(input('Incorrect ID! Enter correct ID (or 0 to return): '))
         if entry_id == 0:
             return
         row = db.get_entry(entry_id)
@@ -92,24 +96,24 @@ def show_update() -> None:
     print(f"{'[id]':4}{'[service]':>12}\t{'[login]':>12}\t{'[password]':>16}\t{'[notes]':>14}")
     print(f"{entry_id:4}{service:>12}\t{login:>12}\t{password:>16}\t{notes:>14}")
     
-    # TODO: edit output, currently its very ugly :\
-    print('u - update; d - delete; e - exit')
-    ans = input('select action: ').lower()
-    while ans not in ['u', 'd', 'e']:
-        ans = input('incorrect action! choose again: ').lower()
-    
-    if ans == 'u':
-        column = input('enter column to edit: ').lower()
+    print("Available actions: u(pdate), d(elete)")
+    ans = input('Enter action: ').lower()
+    while ans not in ['update', 'u', 'delete', 'd']:
+        ans = input('Incorrect action! Enter again (or 0 to return): ').lower()
+        if ans == '0':
+            return
+    if ans in ['update', 'u']:
+        column = input('Enter column to edit: ').lower()
         while column not in ['service', 'login', 'password', 'notes']:
-            column = input('incorrect value! enter column name to edit: ').lower()
-        value = input('enter new value: ')
+            column = input('Incorrect column name! Enter column to edit: ').lower()
+        value = input('Enter new value: ')
         res = db.update_entry(entry_id, column, value)
-        print('success!' if res else 'something went wrong..')
-    elif ans == 'd':
-        confirm = input("are you sure? type 'yes' to continue: ").lower()
+        print('Update success!' if res else 'Something went wrong..')
+    elif ans in ['delete', 'd']:
+        confirm = input("Are you sure? Type 'yes' to continue: ").lower()
         if confirm in ['yes', 'y']:
             res = db.delete_entry(entry_id)
-            print('row deleted!' if res else 'something went wrong..')
+            print('Deletion success!' if res else 'Something went wrong..')
 
 
 def main() -> None:
