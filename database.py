@@ -23,9 +23,7 @@ def create_entry(service: str, login: str, password: str, notes: str = '') -> No
         con.execute("""
             INSERT INTO passwords (service, login, password, notes)
             VALUES (?, ?, ?, ?)
-            """, 
-            (service, login, password, notes),
-        )
+        """, (service, login, password, notes))
 
 
 def list_entries() -> list[tuple]:
@@ -42,20 +40,22 @@ def list_entries() -> list[tuple]:
 def get_entry(entry_id: int) -> tuple | None:
     """Load a single entry by its id"""
     with sqlite3.connect(DB_PATH) as con:
-        cur = con.execute(
-            "SELECT id, service, login, password, notes FROM passwords WHERE id = ?", 
-            (entry_id,),
-        )
+        cur = con.execute("""
+            SELECT id, service, login, password, notes 
+            FROM passwords 
+            WHERE id = ?
+        """, (entry_id,))
         return cur.fetchone()
 
 
 def delete_entry(entry_id: int) -> bool:
     """Delete an entry by id"""
     with sqlite3.connect(DB_PATH) as con:
-        cur = con.execute(
-            "DELETE FROM passwords WHERE id = ?", 
-            (entry_id,),
-        )
+        cur = con.execute("""
+            DELETE 
+            FROM passwords 
+            WHERE id = ?
+        """, (entry_id,))
         return cur.rowcount > 0
     
 
@@ -66,8 +66,9 @@ def update_entry(entry_id: int, column: str, value: str) -> bool:
         raise ValueError("Invalid column name")
 
     with sqlite3.connect(DB_PATH) as con:
-        cur = con.execute(
-            f"UPDATE passwords SET {column} = ? WHERE id = ?", 
-            (value, entry_id),
-        )
+        cur = con.execute(f"""
+            UPDATE passwords 
+            SET {column} = ? 
+            WHERE id = ?
+        """, (value, entry_id))
         return cur.rowcount > 0
