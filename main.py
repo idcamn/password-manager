@@ -1,7 +1,7 @@
 import secrets
 import string
 import database as db
-from constants import (SAFE_UPPERCASE, SAFE_LOWERCASE, SAFE_DIGITS, SAFE_SYMBOLS)
+from constants import (SAFE_UPPERCASE, SAFE_LOWERCASE, SAFE_LETTERS, SAFE_DIGITS, SAFE_SYMBOLS, SAFE_ALPHABET)
 
 def generate_password(length: int = 12) -> str:
     if length < 4:
@@ -15,8 +15,7 @@ def generate_password(length: int = 12) -> str:
         secrets.choice(SAFE_SYMBOLS)
     ]
 
-    pool = SAFE_UPPERCASE + SAFE_LOWERCASE + SAFE_DIGITS + SAFE_SYMBOLS
-    res = [secrets.choice(pool) for _ in range(length - 4)] + guaranteed
+    res = [secrets.choice(SAFE_ALPHABET) for _ in range(length - 4)] + guaranteed
     secrets.SystemRandom().shuffle(res)
     return ''.join(res)
 
