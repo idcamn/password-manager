@@ -93,12 +93,17 @@ def show_update() -> None:
         ans = input('incorrect action! choose again: ').lower()
     
     if ans == 'u':
-        print('update by column')
+        column = input('enter column to edit: ').lower()
+        while column not in ['service', 'login', 'password', 'notes']:
+            column = input('incorrect value! enter column name to edit: ').lower()
+        value = input('enter new value: ')
+        res = db.edit_by_id(row_id, column, value)
+        print('success!' if res else 'something went wrong..')
     elif ans == 'd':
         confirm = input("are you sure? type 'yes' to continue: ").lower()
         if confirm in ['yes', 'y']:
             res = db.delete_by_id(row_id)
-            print('row deleted!' if res else 'something went wrong')
+            print('row deleted!' if res else 'something went wrong..')
 
 
 def main() -> None:

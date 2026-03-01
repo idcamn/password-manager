@@ -50,3 +50,9 @@ def delete_by_id(row_id: int) -> bool:
     with sqlite3.connect(DB_PATH) as con:
         cur = con.execute("DELETE FROM passwords WHERE id = ?", (row_id,),)
         return cur.rowcount > 0 # returns True if row deleted, else False
+    
+
+def edit_by_id(row_id: int, column_name: str, new_value: str) -> bool:
+    with sqlite3.connect(DB_PATH) as con:
+        cur = con.execute(f"UPDATE passwords SET {column_name} = ? WHERE id = ?", (new_value, row_id),)
+        return cur.rowcount > 0
