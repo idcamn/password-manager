@@ -2,6 +2,7 @@ import secrets
 import string
 import database as db
 
+
 def generate_password(length: int = 12) -> str:
     if length < 4:
         raise ValueError("Password length must be >= 4")
@@ -54,6 +55,7 @@ def show_help() -> None:
 def show_list() -> None:
     pw_data = db.load_passwords()
     print(pw_data)
+    # TODO: if asked, copy password by id
 
 
 def show_add() -> None:
@@ -75,16 +77,26 @@ def show_add() -> None:
 
 
 def show_update() -> None:
-    data = None
-    while True:
-        ans = int(input('type row id to edit: '))
-        res = db.load_by_id(ans)
-        if res is None:
-            print('incorrect id specified, try again!')
-            continue
-        else:
-            break
-        
+    row_id = input('enter row id: ')
+    row = db.load_by_id(row_id)
+    while row is None:
+        row_id = input('incorrect id! enter correct id: ')
+        row = db.load_by_id(row_id)
+    idx, service, login, password, notes = row
+    print(f"{'[id]':4}{'[service]':>12}\t{'[login]':>12}\t{'[password]':>16}\t{'[notes]':>14}")
+    print(f"{idx:4}{service:>12}\t{login:>12}\t{password:>16}\t{notes:>14}")
+    
+    # TODO: edit output, currently its very ugly :\
+    print('u - update; d - delete; e - exit')
+    ans = input('select action: ').lower()
+    while ans not in ['u', 'd', 'e']:
+        ans = input('incorrect action! choose again: ').lower()
+    
+    if ans == 'u':
+        print('update by column')
+    elif ans == 'd':
+        print('delete row by id')
+    
 
 
 def main() -> None:
