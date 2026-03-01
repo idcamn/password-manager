@@ -40,7 +40,13 @@ def load_passwords() -> list[tuple]:
         return cur.fetchall()
     
 
-def load_by_id(id: int) -> tuple | None:
+def load_by_id(row_id: int) -> tuple | None:
     with sqlite3.connect(DB_PATH) as con:
-        cur = con.execute("SELECT id, service, login, password, notes FROM passwords WHERE id = ?", (id,),)
+        cur = con.execute("SELECT id, service, login, password, notes FROM passwords WHERE id = ?", (row_id,),)
         return cur.fetchone()
+
+
+def delete_by_id(row_id: int) -> bool:
+    with sqlite3.connect(DB_PATH) as con:
+        cur = con.execute("DELETE FROM passwords WHERE id = ?", (row_id,),)
+        return cur.rowcount > 0 # returns True if row deleted, else False

@@ -95,8 +95,10 @@ def show_update() -> None:
     if ans == 'u':
         print('update by column')
     elif ans == 'd':
-        print('delete row by id')
-    
+        confirm = input("are you sure? type 'yes' to continue: ").lower()
+        if confirm in ['yes', 'y']:
+            res = db.delete_by_id(row_id)
+            print('row deleted!' if res else 'something went wrong')
 
 
 def main() -> None:
