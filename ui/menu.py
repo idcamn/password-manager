@@ -1,7 +1,6 @@
 from .display import print_entries
 from core.generator import generate_password
-import db.repository as db
-
+from db.repository import list_entries, create_entry, get_entry, delete_entry, update_entry
 
 def show_menu() -> None:
     print("[Main Menu]")
@@ -35,7 +34,7 @@ def show_cmds() -> None:
 
 def show_list() -> None:
     print("[Passwords List]")
-    print_entries(db.list_entries())
+    print_entries(list_entries())
     # TODO: if asked, copy password by id
 
 
@@ -54,7 +53,7 @@ def show_add() -> None:
         else:
             data_password = input('Password: ')
         data_notes = input('Enter notes (optional): ')
-        db.create_entry(data_service, data_login, data_password, data_notes)
+        create_entry(data_service, data_login, data_password, data_notes)
         print('Success!')
 
 
@@ -62,12 +61,12 @@ def show_update() -> None:
     # FIXME: raising valueerror if input != int, add checks for empty/non-digit input
     print("[Update Password]")
     entry_id = int(input('Enter ID (from passwords list): '))
-    row = db.get_entry(entry_id)
+    row = get_entry(entry_id)
     while row is None:
         entry_id = int(input('Incorrect ID! Enter correct ID (or 0 to return): '))
         if entry_id == 0:
             return
-        row = db.get_entry(entry_id)
+        row = get_entry(entry_id)
 
     print_entries([row])
     
@@ -82,10 +81,10 @@ def show_update() -> None:
         while column not in ['service', 'login', 'password', 'notes']:
             column = input('Incorrect column name! Enter column to edit: ').lower()
         value = input('Enter new value: ')
-        res = db.update_entry(entry_id, column, value)
+        res = update_entry(entry_id, column, value)
         print('Update success!' if res else 'Something went wrong..')
     elif ans in ['delete', 'd']:
         confirm = input("Are you sure? Type 'yes' to continue: ").lower()
         if confirm in ['yes', 'y']:
-            res = db.delete_entry(entry_id)
+            res = delete_entry(entry_id)
             print('Deletion success!' if res else 'Something went wrong..')
