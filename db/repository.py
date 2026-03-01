@@ -1,5 +1,6 @@
 import sqlite3
 
+
 DB_PATH = 'passwords.db'
 
 
