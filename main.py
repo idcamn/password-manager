@@ -77,10 +77,12 @@ def show_add() -> None:
 
 
 def show_update() -> None:
-    row_id = input('enter row id: ')
+    row_id = int(input('enter row id: '))
     row = db.load_by_id(row_id)
     while row is None:
-        row_id = input('incorrect id! enter correct id: ')
+        row_id = int(input('incorrect id! enter correct id (or 0 to exit): '))
+        if row_id == 0:
+            return
         row = db.load_by_id(row_id)
     idx, service, login, password, notes = row
     print(f"{'[id]':4}{'[service]':>12}\t{'[login]':>12}\t{'[password]':>16}\t{'[notes]':>14}")
