@@ -53,6 +53,7 @@ def show_help() -> None:
 
 
 def show_list() -> None:
+    # TODO: change output, make it look nice
     pw_data = db.load_passwords()
     print(pw_data)
     # TODO: if asked, copy password by id

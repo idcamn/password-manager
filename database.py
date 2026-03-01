@@ -61,6 +61,10 @@ def delete_by_id(row_id: int) -> bool:
 
 def edit_by_id(row_id: int, column_name: str, new_value: str) -> bool:
     """Update a selected column value by id"""
+    allowed_columns = {"service", "login", "password", "notes"}
+    if column_name not in allowed_columns:
+        raise ValueError("Invalid column name")
+
     with sqlite3.connect(DB_PATH) as con:
         cur = con.execute(
             f"UPDATE passwords SET {column_name} = ? WHERE id = ?", 
